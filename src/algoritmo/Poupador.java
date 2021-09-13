@@ -15,14 +15,14 @@ public class Poupador extends ProgramaPoupador {
 	static int teste = 0;
 	static int xBanco = -1;
 	static int yBanco = -1;
-	public class PossibilidadeMovimento {
-		boolean isViavel;
+	public class PossibilidadeMovimento { //Possibilidades de movimento do poupador
+		boolean isViavel; //se o movimento é viavel
 		int x;
 		int y;
 		Visao visao;
 		int coordenadaVisao;
 		int comandoMovimento;
-		PossibilidadeMovimento oposto;
+		PossibilidadeMovimento oposto; // possibilidade de movimento oposto aos ja declarados
 
 		public PossibilidadeMovimento(boolean isViavel, int x, int y, Visao visao, int coordenadaVisao, int comandoMovimento){
 			this.isViavel = isViavel;
@@ -34,7 +34,7 @@ public class Poupador extends ProgramaPoupador {
 		}
 	}
 
-	//Mapeamento de movimentos, ainda falta uma variavel com parametro, possivelmente um boolean
+	//Mapeamento de movimentos
 	void mapearMovimentos(){
 		int x = sensor.getPosicao().x;
 		int y = sensor.getPosicao().y;
@@ -73,7 +73,7 @@ public class Poupador extends ProgramaPoupador {
 		GUARDAR_MOEDAS
 	}
 
-	public Visao getResultVisao(int i){
+	public Visao getResultVisao(int i){ //Resultados em que o poupador pode ter sobrea a visao q ele ta tendo( de acodo com a tabela)
 		switch(i){
 			case -2:
 				return Visao.SEM_VISAO;
@@ -130,6 +130,7 @@ public class Poupador extends ProgramaPoupador {
 
 		teste++;
 
+		//Seu objetivo principal é sempre explorar e registrar seus movimentos por onde ele passsa
 		if(teste%2 != 0){
 			System.out.println("Poupador 0 ------");
 		}else{
@@ -140,7 +141,7 @@ public class Poupador extends ProgramaPoupador {
 		return decidirAcaoProObjetivo(Objetivo.EXPLORAR);
 	}
 
-
+	//Decidindo objetivo,
 	int decidirAcaoProObjetivo(Objetivo objetivo){
 		Random random = new Random();
 		if(objetivo == Objetivo.FUGIR){
@@ -154,14 +155,14 @@ public class Poupador extends ProgramaPoupador {
 		}
 		return random.nextInt(5);
 	}
-
-	ArrayList<PossibilidadeMovimento> movimentosViaveisMenos(int removeindex){
+/*
+	ArrayList<PossibilidadeMovimento> movimentosViaveisMenos(int removeindex){ //Movimentos menos viaveis // não usado
 		ArrayList<PossibilidadeMovimento> array = getMovimentosViaveis();
 		array.remove(removeindex);
 		return array;
 	}
 
-	PossibilidadeMovimento getPosicaoLadraoMovimentosPossiveis(){
+	PossibilidadeMovimento getPosicaoLadraoMovimentosPossiveis(){ //movimentos possives do ladrão // não usado
 		for(int i =0; i< getMovimentos().size(); i++){
 			if(getMovimentos().get(i).visao == Visao.LADRAO){
 				return getMovimentos().get(i);
@@ -169,7 +170,7 @@ public class Poupador extends ProgramaPoupador {
 		}
 		return null;
 	}
-
+*/
 	//Tratamento de repetição para OBJETIVOS do poupador(Fugir,Guardar Moedas e explorar)
 	int tratarRepeticao(PossibilidadeMovimento movimento){
 		if(penultimox == ultimox && penultimoy == ultimoy){
@@ -181,14 +182,14 @@ public class Poupador extends ProgramaPoupador {
 			return movimento.comandoMovimento;
 		}
 	}
-
+	//Proximo Movimento viavel a se fazer
 	int movimentoDiferente(int x, int y){
 		ArrayList<PossibilidadeMovimento> movimentosViaveis = getMovimentosViaveis();
-		if(movimentosViaveis.size() == 0){
+		if(movimentosViaveis.size() == 0){ // caso ele n precise fazer nenhum movimento viavel, ele retorna 0 e decide o proximo movimento
 			return 0;
 		} else
-		if(movimentosViaveis.size() == 1){
-			return movimentosViaveis.get(0).comandoMovimento;
+		if(movimentosViaveis.size() == 1){ // caso eleprecise fazer  movimento viavel
+			return movimentosViaveis.get(0).comandoMovimento; // ele retorna um comando de movimento aleatorio, para realizar algo diferente
 		} else {
 			Random random = new Random();
 			int randomNb = random.nextInt(movimentosViaveis.size());
@@ -196,8 +197,8 @@ public class Poupador extends ProgramaPoupador {
 		}
 	}
 
-	ArrayList<PossibilidadeMovimento> getMovimentos(){
-		ArrayList<PossibilidadeMovimento> movimentos = new ArrayList<>();
+	ArrayList<PossibilidadeMovimento> getMovimentos(){//Movimentos
+		ArrayList<PossibilidadeMovimento> movimentos = new ArrayList<>(); //ArrayList de movimentos
 		movimentos.add(acima);
 		movimentos.add(esquerda);
 		movimentos.add(direita);
@@ -205,47 +206,47 @@ public class Poupador extends ProgramaPoupador {
 		return movimentos;
 	}
 
-	ArrayList<PossibilidadeMovimento> getMovimentosViaveis(){
+	ArrayList<PossibilidadeMovimento> getMovimentosViaveis(){ //Movimentos Viaves
 		ArrayList<PossibilidadeMovimento> movimentos = getMovimentos();
 		for(int i =0; i< movimentos.size(); i++){
-			if(!movimentos.get(i).isViavel){
-				movimentos.remove(i);
+			if(!movimentos.get(i).isViavel){ // se o movimento viavel for diferent do indice de movimentos comuns entao ele realiza um movimento diferente viavel
+				movimentos.remove(i); //logo em seguida dps da realização do movimento , ele remove o indice do movimento viavel
 			}
 		}
-		return movimentos;
+		return movimentos; // retornando aos movimentos padroes
 	}
 
-	boolean soTemVazioEMoeda(ArrayList<PossibilidadeMovimento> movimentos){
+	boolean soTemVazioEMoeda(ArrayList<PossibilidadeMovimento> movimentos){// contador de moedas e espaços vazios
 		int countvazios = 0;
 		int countmoedas = 0;
 		for(int i = 0; i< movimentos.size(); i++){
-			if(movimentos.get(i).visao != Visao.MOEDA && movimentos.get(i).visao != Visao.CELULA_VAZIA){
+			if(movimentos.get(i).visao != Visao.MOEDA && movimentos.get(i).visao != Visao.CELULA_VAZIA){ // se a sua visão nao tiver moeda e nem espaço vazio ele retorna false(pode ser um ladrao ou pastinha)
 				return false;
 			}
-			if(movimentos.get(i).visao == Visao.MOEDA){
+			if(movimentos.get(i).visao == Visao.MOEDA){ // Se for moeda ele contabiliza
 				countmoedas ++;
 			}
-			if(movimentos.get(i).visao == Visao.CELULA_VAZIA){
+			if(movimentos.get(i).visao == Visao.CELULA_VAZIA){ // Se for celula vazia(espaço 0) ele tbm contabiliza
 				countvazios ++;
 			}
 		}
-		if(countmoedas == 0 || countvazios == 0){
+		if(countmoedas == 0 || countvazios == 0){ //caso ele fique parado(improvavel)
 			return false;
 		}
 		return true;
 	}
 
-	PossibilidadeMovimento tentarBanco(){
+	PossibilidadeMovimento tentarBanco(){ //Usando o algoritimo de caminho minimo
 		if(xBanco != -1 && yBanco != -1 || toVendoUmBanco()){ //Banco avistado!, lembro de sua posição
 			Double menorDistancia = Double.MAX_VALUE;
 			for(int i = 0; i< getMovimentosViaveis().size(); i++){
-				if(distanciaEntreDoisPontos(sensor.getPosicao().x, sensor.getPosicao().y, xBanco, yBanco) < menorDistancia){
+				if(distanciaEntreDoisPontos(sensor.getPosicao().x, sensor.getPosicao().y, xBanco, yBanco) < menorDistancia){ // se a distancia entre as posicoes do sensores x e y forem menor do que a distancia do banco, entao ele contabiliza um movimento viavel até o banco
 					menorDistancia = distanciaEntreDoisPontos(sensor.getPosicao().x, sensor.getPosicao().y, xBanco, yBanco);
 				}
 			}
 			ArrayList<PossibilidadeMovimento> distanciasIguais = new ArrayList<>();
 			for(int i =0; i< getMovimentosViaveis().size(); i++){
-				if(distanciaEntreDoisPontos(sensor.getPosicao().x, sensor.getPosicao().y, xBanco, yBanco) == menorDistancia){
+				if(distanciaEntreDoisPontos(sensor.getPosicao().x, sensor.getPosicao().y, xBanco, yBanco) == menorDistancia){//ja se a distancias entre eles forem iguais, ele vai direto para o banco
 					distanciasIguais.add(getMovimentosViaveis().get(i));
 				}
 			}
@@ -260,22 +261,22 @@ public class Poupador extends ProgramaPoupador {
 
 	PossibilidadeMovimento fugir(){
 		Random random = new Random();
-		if(toVendoUmLadrao()){
+		if(toVendoUmLadrao()){ // caso haja um ladrao na visao do ladrao
 			int xLadrao = sensor.getPosicao().x + diferencaXPraCoordenadaVisao(indexVisaoLadrao());
 			int yLadrao = sensor.getPosicao().y + diferencaYPraCoordenadaVisao(indexVisaoLadrao());
 			Double maiorDistancia = 0.0;
 			for(int i = 0; i< getMovimentosViaveis().size(); i++){
-				if(distanciaEntreDoisPontos(sensor.getPosicao().x, sensor.getPosicao().y, xLadrao, yLadrao) > maiorDistancia){
+				if(distanciaEntreDoisPontos(sensor.getPosicao().x, sensor.getPosicao().y, xLadrao, yLadrao) > maiorDistancia){ // ele pega a distancia que el ver do ladrao se for menor que a distancia do poupador para o ladrao, ele foge pelas coordeenas
 					maiorDistancia = distanciaEntreDoisPontos(sensor.getPosicao().x, sensor.getPosicao().y, xLadrao, yLadrao);
 				}
 			}
 			ArrayList<PossibilidadeMovimento> distanciasIguais = new ArrayList<>();
 			for(int i =0; i< getMovimentosViaveis().size(); i++) {
-				if (distanciaEntreDoisPontos(sensor.getPosicao().x, sensor.getPosicao().y, xLadrao, yLadrao) == maiorDistancia) {
+				if (distanciaEntreDoisPontos(sensor.getPosicao().x, sensor.getPosicao().y, xLadrao, yLadrao) == maiorDistancia) { // se a distancias forem iguais , ele realiza um movimento viavel aleatorio
 					distanciasIguais.add(getMovimentosViaveis().get(i));
 				}
 			}
-			if(random.nextInt(5) < 5) {
+			if(random.nextInt(5) < 5) { // dps de realizar o proximo movimento viavel, ele procura um lugar menos explorado
 				int randomindex = random.nextInt(distanciasIguais.size());
 				return distanciasIguais.get(randomindex);
 			} else {
@@ -326,7 +327,7 @@ public class Poupador extends ProgramaPoupador {
 		return 0;
 	}
 
-	int pesoCheiroLadroes(){
+	int pesoCheiroLadroes(){ //olfatoLadrao
 		int peso = 0;
 		for(int i = 0; i < 7; i++){
 			peso += sensor.getAmbienteOlfatoLadrao()[i];
@@ -334,12 +335,12 @@ public class Poupador extends ProgramaPoupador {
 		return peso;
 	}
 
-	PossibilidadeMovimento getLugarMenosExplorado(){
+	PossibilidadeMovimento getLugarMenosExplorado(){ // Busca por lugares menos explorados
 		int menorPeso = Integer.MAX_VALUE;
 		Random random = new Random();
 
 		boolean aceitaPastilha = false;
-		if(sensor.getNumeroDeMoedas() >= 5) {
+		if(sensor.getNumeroDeMoedas() >= 5) { //se o numero de moedas for maior ou igual a 5 entao ele pode aceitar moedas
 			if (random.nextInt(10) + 4 < sensor.getNumeroDeMoedas() + pesoCheiroLadroes()) {
 				aceitaPastilha = true;
 			}
@@ -452,7 +453,7 @@ public class Poupador extends ProgramaPoupador {
 		}
 		return toVendo;
 	}
-
+/*
 	int indexVisaoBanco(){
 		for(int i =0; i< 24; i++){
 			if(sensor.getVisaoIdentificacao()[i] == Visao.BANCO.get()){
@@ -461,7 +462,7 @@ public class Poupador extends ProgramaPoupador {
 		}
 		return 0;
 	}
-
+*/
 	int indexVisaoLadrao(){
 		for(int i =0; i< 24; i++){
 			if(sensor.getVisaoIdentificacao()[i] == Visao.LADRAO.get()){
