@@ -1,0 +1,25 @@
+--- Processos ---
+
+1 - Mapear inicialmente a matriz (FEITO)
+2 - Salvar na memória onde passou (FEITO)
+3 - Saber nas posição para moventar, o que há (Para alterar, colocar a visao)
+4 - Escolher a melhor opção para se mover 
+
+
+
+--- Procedimento melhor para escolher onde mover ---
+-> Verificar as 4 posições possiveis de locomoção se já foi caminhada:
+	1) Criar um metodo que pegando o objeto(chave de comandos), devolva a posicao ou valor de verificação na matriz (FEITO)
+	2) Com valor de posicao, será verificado se já foi rastreado a posicao na matriz (FEITO)
+	3) Guardar em contagem a melhor decisao para o agente e preferencia tambem
+	
+	
+-> Verificar situação de não ir para 'Parede', 'Sem visão para o local', 'Fora do ambiente'
+
+
+--------------------------------------------------
+Explorar mapa:
+	1) Apartir da visão, acrescenta o codigo do objeto na matriz.
+	2) Ver algoritmo para explorar outros locais (Talves colocar uma medida para explorar outro quadrante da fase):
+		- Avalia atraves do ambiente o que é mais importante e fazer, como, já explorei muitas unidades no quadrante,
+		o agente sente a necessidade de ir para outro quadrante.
